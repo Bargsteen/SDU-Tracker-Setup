@@ -1,18 +1,21 @@
-import psycopg2
+import mysql.connector
 import base64
 
 def create_and_insert_user_links():
   try:
-    conn = psycopg2.connect("host='localhost' dbname='postgres' user='postgres'")
+    conn = mysql.connector.connect(host='localhost', 
+                                   database='sdu',
+                                   user='root')
     cur = conn.cursor()
     cur.execute("SELECT * FROM users;")
+
     rows = cur.fetchall()
 
     for row in rows:
       user_id, tracking_type, measurement_days, users, user_link = row
       if not user_link:
         new_user_link = create_user_link(user_id, tracking_type, measurement_days, users)
-        cur.execute(f"UPDATE users SET setuplink = '{new_user_link}' WHERE userid = '{user_id}';")
+        cur.execute(f"UPDATE users SET setup_link = '{new_user_link}' WHERE user_id = '{user_id}';")
     conn.commit()
   except Exception as e:
     print("Can't connect to database: " + str(e))
@@ -29,8 +32,7 @@ def create_user_link(user_id, tracking_type, measurement_days, users):
   return user_link
 
 def main():
-  #create_and_insert_user_links()
-  print(create_user_link("kasperid", 1, 30, "[kasper, peter]"))
+  create_and_insert_user_links()
 
 if __name__ == "__main__":
   main()
