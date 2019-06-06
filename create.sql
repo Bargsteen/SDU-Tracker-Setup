@@ -7,6 +7,6 @@ CREATE TABLE users (
   );
 
 INSERT INTO users (user_id, tracking_type, measurement_days, users) VALUES
-  ('kasperid', b'0', 30, '[kasper, peter]'),
-  ('peterid', b'1', 20, '[soeren, peter]'),
+  ('bargsteen', b'0', 30, '[kasper, kasper2]'),
+  ('id', b'1', 20, '[soeren, peter]'),
   ('tomid', b'0', 30, '[tom, peter]');

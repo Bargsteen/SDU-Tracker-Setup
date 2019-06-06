@@ -27,7 +27,6 @@ type TrackingType
 
 type alias Model =
     { username : String
-    , password : String
     , users : String
     , trackingType : TrackingType
     , measurementDays : String
@@ -38,7 +37,7 @@ type alias Model =
 
 init : Model
 init =
-    Model "" "" "" AppTracking "" [] ""
+    Model "" "" AppTracking "" [] ""
 
 
 -- UPDATE
@@ -47,7 +46,6 @@ init =
 type Msg
     = NoOp
     | Username String
-    | Password String
     | Users String
     | TrackingType TrackingType
     | MeasurementDays String
@@ -62,9 +60,6 @@ update msg model =
 
         Username newUsername ->
             { model | username = newUsername }
-
-        Password newPassword ->
-            { model | password = newPassword }
 
         Users newUsers ->
             { model | users = newUsers }
@@ -94,7 +89,6 @@ view model =
         [ h1 [] [ text "Opret Setuplink" ]
         , div []
             [ viewInput "text" "Brugernavn" model.username Username
-            , viewInput "text" "Kodeord" model.password Password
             , viewInput "number" "Antal måledage" model.measurementDays MeasurementDays
             , viewInput "text" "Brugere (separeret med komma)" model.users Users
             , viewTrackingTypePicker model
@@ -148,7 +142,6 @@ modelValidator : Validator String Model
 modelValidator =
     Validate.all
         [ ifBlank .username "Indtast et brugernavn."
-        , ifBlank .password "Indtast et kodeord."
         , ifNotInt .measurementDays (\_ -> "Indtast et antal måledage.")
         , ifBlank .users "Indtast en liste af brugere (separaret med komma)."
         ]
@@ -157,8 +150,7 @@ modelValidator =
 mkSetupLink : Model -> String
 mkSetupLink model =
     let 
-        jsonData = "{ \"username\": \"" ++ model.username  ++ "\"" ++
-                   ", \"password\": \"" ++ model.password  ++ "\"" ++
+        jsonData = "{ \"user_id\": \"" ++ model.username  ++ "\"" ++
                    ", \"users\": \"[" ++ model.users  ++ "]\"" ++
                    ", \"tracking_type\": \"" ++ (trackingTypeToString model.trackingType) ++ "\"" ++
                    ", \"measurement_days\": \"" ++ model.measurementDays  ++ "\" }"
